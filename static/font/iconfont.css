@@ -1,0 +1,28 @@
+@font-face {
+	font-family: "iconfont";
+	src: url('@/static/font/iconfont.ttf?t=1710485317287') format('truetype');
+}
+
+.iconfont {
+	font-family: "iconfont" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-check:before {
+	content: "\e605";
+}
+
+.icon-arrow-up:before {
+	content: "\e658";
+}
+
+.icon-arrow-down:before {
+	content: "\e659";
+}
+
+.icon-sort:before {
+	content: "\e625";
+}
