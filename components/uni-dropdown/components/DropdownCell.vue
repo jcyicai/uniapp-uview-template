@@ -45,7 +45,7 @@ export default {
 		init() {
 			const options = this.cellItem?.options
 			const cellValue = this.cellItem?.value
-			if (Array.isArray(options) && options.length && cellValue) {
+			if (Array.isArray(options) && options.length && (cellValue || cellValue === 0)) {
 				for (let i = 0; i < options.length; i++) {
 					const item = options[i]
 					if (item.id === cellValue) {

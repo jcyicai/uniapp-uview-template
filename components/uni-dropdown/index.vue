@@ -1,5 +1,7 @@
 <template>
-	<view class="uni-dropdown">
+	<!-- :style="showDropdown ? '' : 'overflow:hidden'" -->
+	<!-- 防止透传 -->
+	<view class="uni-dropdown" @touchmove.stop.prevent="() => {}" @tap.stop.prevent="() => {}">
 		<view
 			class="uni-dropdown__menu "
 			:class="{ 'uni-border-bottom': borderBottom }"
@@ -16,7 +18,7 @@
 				<text
 					class="uni-dropdown__menu__item__title"
 					:style="{
-						color: index === current ? activeColor : inactiveColor,
+						color: index === current || (item.value && item.value !== 'sort') ? activeColor : inactiveColor,
 						fontSize: addUnit(titleSize)
 					}"
 				>
@@ -161,6 +163,7 @@ export default {
 	data() {
 		return {
 			SORT_ICON,
+			//showDropdown: false, // 是否打开下来菜单,
 			menuList: [], // 显示的菜单
 			active: false, // 下拉菜单的状态
 			// 当前是第几个菜单处于激活状态，小程序中此处不能写成false或者""，否则后续将current赋值为0，
@@ -195,6 +198,13 @@ export default {
 		init() {
 			this.getContentHeight()
 			this.menuList = deepClone(this.options)
+
+			this.menuList = this.menuList.map(item => {
+				if (item.type === 'cell' && Array.isArray(item.options) && item.options.length) {
+					item.options.unshift({ id: 0, name: '不限' })
+				}
+				return item
+			})
 		},
 		getContentHeight() {
 			const windowHeight = getSystemInfo().windowHeight
@@ -258,6 +268,7 @@ export default {
 		},
 		// 打开下拉菜单
 		open(index) {
+			//this.showDropdown = true
 			// 展开时，设置下拉内容的样式
 			this.contentStyle = {
 				zIndex: 11
@@ -268,8 +279,13 @@ export default {
 			this.$emit('open', this.current)
 		},
 		// 设置下拉菜单处于收起状态
-		close() {
-			this.$emit('close', this.current)
+		close(val) {
+			if (val !== undefined) {
+				this.menuList[this.current].value = val
+			}
+
+			//this.showDropdown = false
+
 			// 设置为收起状态，同时current归位，设置为空字符串
 			this.active = false
 			this.current = 99999
@@ -278,6 +294,8 @@ export default {
 				zIndex: -1,
 				opacity: 0
 			}
+
+			this.$emit('close', this.current)
 		},
 		// 列表点击
 		cellClick(res) {

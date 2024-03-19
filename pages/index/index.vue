@@ -12,12 +12,15 @@
 		>
 			<template #custom>
 				<view class="dropdown-content">
-					测试
-					<button @click="handleResize">重置</button>
-					<button @click="handleConfirm">确定</button>
+					<input class="uni-input" placeholder="请输入" v-model="iptValue" />
+					<view class="btn-box">
+						<button @click="handleResize">重置</button>
+						<button @click="handleConfirm">确定</button>
+					</view>
 				</view>
 			</template>
 		</uni-dropdown>
+		<view v-for="(item, index) in 100" :key="index">{{ item }}</view>
 	</view>
 </template>
 
@@ -28,6 +31,7 @@ export default {
 	components: { uniDropdown },
 	data() {
 		return {
+			iptValue: '',
 			value2: 2,
 			options: [
 				{
@@ -83,10 +87,11 @@ export default {
 	mounted() {},
 	methods: {
 		handleResize() {
-			this.$refs['dropdown'].close()
+			this.iptValue = ''
+			this.$refs['dropdown'].close(this.iptValue)
 		},
 		handleConfirm() {
-			this.$refs['dropdown'].close()
+			this.$refs['dropdown'].close(this.iptValue)
 		},
 		handleOpen(index) {
 			//console.log(index)
@@ -105,9 +110,24 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .dropdown-content {
 	background: #fff;
-	height: 200rpx;
+	padding: 28rpx;
+	.uni-input {
+		margin-bottom: 28rpx;
+		border: 1px solid #ccc;
+		font-size: 28rpx;
+	}
+	.btn-box {
+		display: flex;
+		::v-deep uni-button {
+			width: 100% !important;
+			padding: 14rpx 14rpx !important;
+			line-height: normal;
+
+			overflow: auto !important;
+		}
+	}
 }
 </style>
